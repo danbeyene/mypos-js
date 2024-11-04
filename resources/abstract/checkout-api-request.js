@@ -18,7 +18,7 @@ class CheckoutApiRequest {
     }
 
     get host() {
-        return this.mypos.config.isSandbox ? 'https://www.mypos.eu/vmp/checkout-test' : 'https://www.mypos.eu/vmp/checkout';
+        return this.mypos.config.isSandbox ? 'https://www.mypos.com/vmp/checkout-test' : 'https://www.mypos.com/vmp/checkout';
     }
 
     send = (handler) => {
@@ -53,14 +53,16 @@ const generateSignature = (params, privateKey) => {
 };
 
 const generateForm = (host, params) => {
-    let rawHtml = '<html><body onload="document.ipcForm.submit()">';
-    rawHtml += `<form id="ipcForm" name="ipcForm" action="${host}" method="post">`;
+    let rawHtml = { host: host };
+    //    let rawHtml = '<html><body onload="document.ipcForm.submit()">';
+    //    rawHtml += `<form id="ipcForm" name="ipcForm" action="${host}" method="post">`;
 
     for (const [key, value] of Object.entries(params)) {
-        rawHtml += `<input type="hidden" name="${key}" value="${value}"/><br>`;
+        rawHtml[`${key}`] = value;
+        //        rawHtml += `<input type="hidden" name="${key}" value="${value}"/><br>`;
     }
 
-    rawHtml += `</form></body></html>`;
+    //    rawHtml += `</form></body></html>`;
     return rawHtml;
 };
 
@@ -69,3 +71,4 @@ const isFunction = (functionToCheck) => {
 };
 
 module.exports = CheckoutApiRequest;
+
